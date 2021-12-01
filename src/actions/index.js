@@ -1,17 +1,10 @@
-import { appConstants } from "../constants";
-import { contentSlots } from "../data";
+import {appConstants} from "../constants";
+import {contentSlots} from "../data";
 
 export const getContentSlots = (payload) => {
   return {
     type: appConstants.GET_CONTENT_SLOTS_SUCCESS,
     payload: contentSlots
-  };
-};
-
-export const updateContentSlots = (payload) => {
-  return {
-    type: appConstants.UPDATE_CONTENT_SLOTS_SUCCESS,
-    payload: payload
   };
 };
 
@@ -22,8 +15,9 @@ export const uploadProduct = (payload) => {
   };
 };
 
-export const updateProduct = () => {
+export const updateProducts = (payload) => {
   return {
-    type: appConstants.UPDATE_PRODUCT_SUCCESS
+    type: appConstants.UPDATE_PRODUCTS_SUCCESS,
+    payload: payload
   };
 };

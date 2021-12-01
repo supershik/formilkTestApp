@@ -1,4 +1,4 @@
-import { appConstants } from "../constants";
+import {appConstants} from "../constants";
 
 export const initialState = {
   products: [],
@@ -25,13 +25,15 @@ const appReducer = (state = initialState, action) => {
         (
           state,
           {
+            id,
             productCode,
             productName,
             productCategory,
             imageFile,
             imageFileName,
             imageUrl,
-            slot
+            slot,
+            checked
           }
         ) => {
           const shouldUpdate = state.products.some(
@@ -44,14 +46,16 @@ const appReducer = (state = initialState, action) => {
               products: state.products.map((product) =>
                 product.productCode === productCode
                   ? {
-                      ...product,
-                      productImages: product.productImages.concat({
-                        imageFile,
-                        imageFileName,
-                        imageUrl,
-                        slot
-                      })
-                    }
+                    ...product,
+                    productImages: product.productImages.concat({
+                      id,
+                      imageFile,
+                      imageFileName,
+                      imageUrl,
+                      slot,
+                      checked
+                    })
+                  }
                   : product
               )
             };
@@ -60,17 +64,19 @@ const appReducer = (state = initialState, action) => {
           return {
             ...state,
             products: state.products.concat({
+              id,
               productCode,
               productName,
               productCategory,
               productExisting: true,
-              slot: "",
               productImages: [
                 {
+                  id,
                   imageFile,
                   imageFileName,
                   imageUrl,
-                  slot
+                  slot,
+                  checked
                 }
               ]
             })
@@ -92,25 +98,10 @@ const appReducer = (state = initialState, action) => {
         ]
       };
 
-    case appConstants.UPDATE_PRODUCT_SUCCESS:
+    case appConstants.UPDATE_PRODUCTS_SUCCESS:
       return {
         ...state,
-        products: state.products.map((product) => ({
-          ...product,
-          productImages: product.productImages.map((p) => {
-            const isErrorMatches = state.errors.some(
-              (data) => data.id === p.imageFileName
-            );
-
-            return {
-              ...p,
-              hasError: isErrorMatches ? true : false,
-              msg: isErrorMatches
-                ? state.errors.find((data) => data.id === p.imageFileName)
-                : []
-            };
-          })
-        }))
+        products: action.payload
       };
 
     default:

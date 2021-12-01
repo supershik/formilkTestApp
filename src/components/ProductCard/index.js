@@ -1,12 +1,12 @@
-import React from "react";
+import React, {useEffect} from "react";
 import MediaCard from "../MediaCard";
-import { Box, Grid, Button } from "@material-ui/core";
-import { useFormik, FormikProvider } from "formik";
+import {Box, Grid, Button} from "@material-ui/core";
+import {useFormik, FormikProvider} from "formik";
 import ProductInputs from "../ProductInputs";
-import { productSchema } from "../../schema";
+import {productSchema} from "../../schema";
 
 export default function ProductCard(props) {
-  const { product, categories, contentSlots } = props;
+  const {product, categories} = props;
 
   const formik = useFormik({
     initialValues: {
@@ -19,7 +19,13 @@ export default function ProductCard(props) {
     enableReinitialize: true,
     validationSchema: productSchema,
     onSubmit: (values) => {
-      console.log(values);
+      const selectedImages = values.productImages.filter(p => p.checked === true)
+      console.log("Selected images: \n")
+      if (selectedImages.length < 1) {
+        console.log("No results")
+      } else {
+        console.log(selectedImages);
+      }
     }
   });
 
@@ -27,8 +33,8 @@ export default function ProductCard(props) {
     <FormikProvider value={formik}>
       <form onSubmit={formik.handleSubmit}>
         <Box>
-          <ProductInputs formik={formik} categories={categories} />
-          <br />
+          <ProductInputs formik={formik} categories={categories}/>
+          <br/>
           <Button variant="contained" color="primary" type="submit">
             Save
           </Button>
@@ -37,7 +43,7 @@ export default function ProductCard(props) {
               <Grid component="div" container spacing={2}>
                 {formik.values.productImages.map((productImage, index) => (
                   <Grid
-                    key={productImage.id}
+                    key={index}
                     component="div"
                     item
                     xl={2}
@@ -48,7 +54,8 @@ export default function ProductCard(props) {
                   >
                     <MediaCard
                       productImage={productImage}
-                      contentSlots={contentSlots}
+                      product={product}
+                      productImageIndex={index}
                     />
                   </Grid>
                 ))}
